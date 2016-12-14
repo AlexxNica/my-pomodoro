@@ -1,7 +1,8 @@
 import {
   SELECT_TYPE,
   UPDATE_POMODORO_TIME,
-  ADD_POMODORO
+  ADD_POMODORO,
+  CLEAR_POMODOROS
 } from '../actions/pomodoros';
 
 export default function pomodoro(state = 0, action) {
@@ -30,7 +31,12 @@ export default function pomodoro(state = 0, action) {
           action.payload
         ]
       };
+    case CLEAR_POMODOROS:
+      return {
+        ...state,
+        recordedPomodoros: []
+      };
     default:
       return state;
   }
-}
+};

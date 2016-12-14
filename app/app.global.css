@@ -140,13 +140,19 @@ input[type=text] {
   display: block;
   border: none;
   outline: none;
-  width: 60px;
-  height: 60px;
-  left: 50px;
-  top: 50px;
+  width: 50px;
+  height: 50px;
+  left: 56px;
+  top: 56px;
   z-index: 100;
   background: none;
   cursor: pointer;
+}
+
+.progress button.play {
+  left: 59px;
+  height: 56px;
+  top: 54px;
 }
 
 .button-selector {
@@ -208,7 +214,7 @@ path.longBreak {
   stroke: #FE5F55;
 }
 
-.progress > svg {
+.progress>svg {
   transform: rotate(270deg);
   z-index: 0;
 }
@@ -223,24 +229,63 @@ path.longBreak {
 
 .pomodoro-record-list {
   width: 400px;
-  height: 40px;
   position: absolute;
   top: 200px;
+}
+
+.pomodoro-record-list .wrap {
+  width: 400px;
+  height: 40px;
+  display: block;
   margin: 0;
   padding: 0;
-  border-radius: 4px;
-  overflow: hidden;
+  background: white repeating-linear-gradient( 45deg, #fff, #fff 5px, #999 7px, #999 7px);
+}
+
+.pomodoro-record-list p {
+  text-align: center;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .pomodoro-record {
   display: inline-block;
   position: absolute;
   text-align: center;
+  overflow: hidden;
   height: 40px;
   line-height: 40px;
   color: #fff;
   top: 0px;
-  overflow: hidden;
+  cursor: pointer;
+}
+
+.marker {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 100ms linear;
+  color: #111;
+  font-size: 13px;
+  background-color: transparent !important;
+}
+
+.left-marker {
+  bottom: 100%;
+  left: 0px;
+  border-left: 1px solid #111;
+  padding-left: 2px;
+}
+
+.right-marker {
+  top: 40px;
+  right: 0px;
+  border-right: 1px solid #111;
+  padding-right: 2px;
+}
+
+.pomodoro-record-container:hover .marker {
+  opacity: 1;
 }
 
 .pomodoro-record.work {
@@ -267,4 +312,12 @@ path.longBreak {
 
 .progress-svg {
   position: absolute;
+}
+
+.minutes-progress {
+  width: 100%;
+  text-align: center;
+  margin-top: 160px;
+  position: absolute;
+  font-size: 16px;
 }

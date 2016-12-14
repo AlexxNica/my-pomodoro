@@ -22,12 +22,18 @@ export function updatePomodoroTime(type, time) {
   };
 }
 
-export function addPomodoro(type, time) {
+export function addPomodoro(type, times) {
   return {
     type: ADD_POMODORO,
     payload: {
       type,
-      time
+      times
     }
+  };
+}
+
+export function clearRecordedPomodoros() {
+  return {
+    type: CLEAR_POMODOROS
   };
 }

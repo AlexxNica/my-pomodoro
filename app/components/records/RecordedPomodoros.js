@@ -3,30 +3,41 @@ import PomodoroRecord from './PomodoroRecord';
 
 export default class RecordedPomodoros extends Component {
   render() {
-    let totalTime = 0;
-    const pomodoros = this.props.recorded.map(pomodoro => {
-      const alteredPomodoro = {
-        ...pomodoro,
-        runningTime: totalTime
-      };
-      totalTime += pomodoro.time;
-      return alteredPomodoro;
-    });
+    let totalTime;
+    let startTime;
+    if (this.props.recorded.length > 0) {
+      totalTime = this.props.recorded[this.props.recorded.length - 1].times.end -
+        this.props.recorded[0].times.start;
+      startTime = this.props.recorded[0].times.start;
+    }
+    const styles = {
+      display: this.props.recorded.length > 0 ? 'block' : 'none'
+    };
 
     return (
-      <ul className="pomodoro-record-list">
-        {pomodoros.map((pomodoro, i) => (
-          <PomodoroRecord
-            key={i}
-            pomodoro={pomodoro}
-            totalTime={totalTime}
-          />
-        ))}
-      </ul>
+      <div
+        className="pomodoro-record-list"
+        style={styles}
+      >
+        <div className="wrap">
+          {this.props.recorded.map((pomodoro, i) => (
+            <PomodoroRecord
+              key={i}
+              pomodoro={pomodoro}
+              totalTime={totalTime}
+              startTime={startTime}
+            />
+          ))}
+        </div>
+        <p><span
+          onClick={() => this.props.clearRecordedPomodoros()}
+        >clear recorded</span></p>
+      </div>
     );
   }
 }
 
 RecordedPomodoros.propTypes = {
-  recorded: PropTypes.arrayOf(PropTypes.object)
+  recorded: PropTypes.arrayOf(PropTypes.object),
+  clearRecordedPomodoros: PropTypes.func
 };

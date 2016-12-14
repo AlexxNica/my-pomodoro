@@ -2,17 +2,34 @@ import React, { Component, PropTypes } from 'react';
 
 export default class PomodoroRecord extends Component {
   render() {
-    const minutes = parseInt(this.props.pomodoro.time / 60, 10) % 60;
-    const pixelWidth = (this.props.pomodoro.time / this.props.totalTime) * 400;
-    const runningPixelWidth = (this.props.pomodoro.runningTime / this.props.totalTime) * 400;
+    const pomodoro = this.props.pomodoro;
+    const startTime = this.props.startTime;
+    const startTimeLabel = new Date(pomodoro.times.start);
+    const endTimeLabel = new Date(pomodoro.times.end);
+    const totalTime = this.props.totalTime;
+    const time = pomodoro.times.end - pomodoro.times.start;
+    const minutes = parseInt(time / 1000 / 60, 10);
+    const width = Math.round((time / totalTime) * 400);
+    const left = Math.round(((pomodoro.times.start - startTime) / totalTime) * 400);
     const styles = {
-      width: `${pixelWidth}px`,
-      left: `${runningPixelWidth}px`
+      width: `${width}px`,
+      left: `${left}px`,
+      height: '40px',
+      position: 'absolute'
+    };
+    const innerStyles = {
+      width: `${width}px`
     };
     return (
-      <li style={styles} className={`pomodoro-record ${this.props.pomodoro.type}`}>
-        {minutes}<span className="min">m</span>
-      </li>
+      <div style={styles} className="pomodoro-record-container">
+        <div style={innerStyles} className={`pomodoro-record ${pomodoro.type}`} >{minutes}m</div>
+        <span className="marker left-marker">
+          {`${startTimeLabel.getHours()}:${startTimeLabel.getMinutes()}`}
+        </span>
+        <span className="marker right-marker">
+          {`${endTimeLabel.getHours()}:${endTimeLabel.getMinutes()}`}
+        </span>
+      </div>
     );
   }
 }
@@ -20,5 +37,6 @@ export default class PomodoroRecord extends Component {
 PomodoroRecord.propTypes = {
   pomodoro: PropTypes.object,
   totalTime: PropTypes.number,
+  startTime: PropTypes.number,
   runningTime: PropTypes.number
 };

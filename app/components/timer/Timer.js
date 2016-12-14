@@ -22,7 +22,7 @@ export default class Timer extends Component {
   }
 
   startTimer() {
-    this.startTime = this.timer;
+    this.startTime = new Date().getTime();
     this.timerOn = true;
     this.timeout = setTimeout(() => this.notify(this.props.currentPomodoro.type),
       this.props.currentPomodoro.time * 60 * 1000);
@@ -34,8 +34,10 @@ export default class Timer extends Component {
 
   stopTimer() {
     if (this.timerOn) {
-      this.props.addPomodoro(this.props.currentPomodoro.type,
-        Math.round((this.timer - this.startTime) / 1000));
+      this.props.addPomodoro(this.props.currentPomodoro.type, {
+        start: this.startTime,
+        end: new Date().getTime()
+      });
       this.timerOn = false;
       clearTimeout(this.timeout);
       this.startBtn.style.display = 'block';
@@ -54,13 +56,13 @@ export default class Timer extends Component {
     );
   }
 
-  loop(t) {
-    this.timer = t;
+  loop() {
     if (this.timerOn) {
-      const seconds = (this.timer - this.startTime) / 1000;
-      let progress = (seconds / (this.props.currentPomodoro.time * 60)).toFixed(4);
+      const t = new Date().getTime();
+      const seconds = (t - this.startTime) / 1000;
+      let progress = (seconds / (this.props.currentPomodoro.time * 60)).toFixed(3);
       if (progress > 1) progress = 1;
-      if (this.state.progress !== progress) this.setState({ progress });
+      if (this.state.progress !== progress) this.setState({ progress, seconds });
     }
     requestAnimationFrame(this.loop);
   }
@@ -72,6 +74,9 @@ export default class Timer extends Component {
 
     const pathStyles = {
       strokeDashoffset: 380 - (this.state.progress * 380)
+    };
+    const minutesStyles = {
+      display: this.state.progress === 0 ? 'none' : 'block'
     };
 
     return (
@@ -107,6 +112,11 @@ export default class Timer extends Component {
           <circle className="timer-border" cx="80" cy="80" r="42" />
           <circle className="timer-border" cx="80" cy="80" r="79" />
         </svg>
+        <p
+          className="minutes-progress"
+          style={minutesStyles}
+        >{Math.floor(this.state.seconds / 60)} minutes
+        </p>
       </div>
     );
   }
